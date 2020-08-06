@@ -15,7 +15,7 @@ server.use('/api', authRouter);
 server.use('/api/users', usersRouter);
 
 server.get('/', (req, res) => {
-    res.send('Users server!');
+    res.sendFile(__dirname + "/client/build/index.html");
 });
 
 module.exports = server;
