@@ -1,14 +1,42 @@
 import React from 'react';
-import {Route} from 'react-router-dom';
+import {Formik, Form, Field} from 'formik';
+import axios from 'axios';
 
+function LoginForm(props){
+    const login = (formValue, actions) => {
+        const newUser = {
+          username: formValue.username,
+          password: formValue.password,
+        }
+    
+        axios.post('http://localhost:3001/api/login', newUser)
+        .then(res => {
+          localStorage.setItem('token', res.data.token)
+          actions.resetForm();
+        })
+        .catch(err => {
+          alert(err.message)
+        })
+      }
 
-function App() {
+    const initialUser = {username: '', password: ''}
+    return(
+        <Formik 
+        initialValues = {initialUser}
+        onSubmit={login}
+        render={props => {
+            return(
+                <Form className='form'>
+                    <label htmlFor='username'>username</label>
+                    <Field name='username' type='text' placeholder='username'/>
+                    <label htmlFor='password'>password</label>
+                    <Field name='password' type='password' placeholder='password'/>
+                    <button type='submit'>Login</button>
+                </Form>
+            )
+        }}/>
+    )
 
-  return (
-    <div className="App">
-      Hello World
-    </div>
-  );
 }
 
-export default App;
+export default LoginForm;
